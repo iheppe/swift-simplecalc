@@ -33,14 +33,14 @@ func calculate(_ args: [String]) -> Int {
             }
         }
     case "avg":
+        var divisor = 0
         for i in args {
-            var divisor = 0
             if (i.isInt) {
                 result += Int(i)!
                 divisor += 1
             }
-            result / divisor
         }
+        result = result / divisor
     case "fact":
         for i in args {
             if (i.isInt) {
@@ -135,7 +135,7 @@ calculate("5 fact") == 120
 
 // Implement calculate([String]) and calculate(String)
 // to handle negative numbers
-/*
+
 calculate(["2", "+", "-2"]) == 0
 calculate(["2", "-", "-2"]) == 4
 calculate(["2", "*", "-2"]) == -4
@@ -150,17 +150,101 @@ calculate("2 - -2") == 4
 calculate("-2 / 2") == -1
 
 calculate("1 -2 3 -4 5 count") == 5
-*/
+
  
 // Implement calculate([String]) and calculate(String)
 // to use floating-point values
-/*
-func calculate(_ args: [String]) -> Double {
-    return -1.0
-}
-func calculate(_ arg: String) -> Double {
-    return -1.0
-}
+
+ 
+ extension String {
+     var isDouble: Bool {
+         return Double(self) != nil
+     }
+ }
+
+ func calculate(_ args: [String]) -> Double {
+     var hasAction = false
+     var counter = 0
+     var action = ""
+     while (hasAction == false) {
+         let curr = args[counter]
+         if (!curr.isDouble) {
+             hasAction = true
+             action = curr
+         }
+         counter += 1
+     }
+     
+     if (args.count == 1) {
+         return 0
+     }
+     
+    var result = 0.0
+     
+     switch action {
+     case "count":
+         for i in args {
+             if (i.isDouble) {
+                 result += 1
+             }
+         }
+     case "avg":
+        var divisor = 0.0
+         for i in args {
+             if (i.isDouble) {
+                 result += Double(i)!
+                divisor += 1
+             }
+         }
+         result = result / divisor
+     case "fact":
+         for i in args {
+             if (i.isDouble) {
+                 var curr = Double(i)!
+                 if curr == 0 {
+                     result = 1
+                 } else {
+                     result = curr
+                 }
+                 while curr > 1 {
+                     curr -= 1
+                     result *= curr
+                 }
+             }
+         }
+     default:
+         var nums = [Double]()
+         for i in args {
+             if (i.isDouble) {
+                 nums.append(Double(i)!)
+             }
+         }
+         if (nums.count == 2) {
+         switch action {
+             case "+":
+                 result = nums[0] + nums[1]
+             case "-":
+                 result = nums[0] - nums[1]
+             case "*":
+                 result = nums[0] * nums[1]
+             case "/":
+                 result = nums[0] / nums[1]
+             default:
+                result = nums[0].truncatingRemainder(dividingBy: nums[1])
+             }
+         }
+     }
+     return result
+ }
+
+ func calculate(_ arg: String) -> Double {
+     let arr = arg.split(separator: " ")
+     var stringArr = [String]()
+     for i in arr {
+         stringArr.append(String(i))
+     }
+     return calculate(stringArr)
+ }
 
 calculate(["2.0", "+", "2.0"]) == 4.0
 calculate([".5", "+", "1.5"]) == 2.0
@@ -169,4 +253,3 @@ calculate(["2.5", "*", "2.5"]) == 6.25
 calculate(["2.0", "/", "2.0"]) == 1.0
 calculate(["2.0", "%", "2.0"]) == 0.0
 calculate("1.0 2.0 3.0 4.0 5.0 count") == 5
-*/
