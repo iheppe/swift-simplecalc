@@ -1,17 +1,99 @@
 print("Welcome to the UW Calculator Playground")
 
+extension String {
+    var isInt: Bool {
+        return Int(self) != nil
+    }
+}
+
 func calculate(_ args: [String]) -> Int {
-    return -1
+    var hasAction = false
+    var counter = 0
+    var action = ""
+    while (hasAction == false) {
+        let curr = args[counter]
+        if (!curr.isInt) {
+            hasAction = true
+            action = curr
+        }
+        counter += 1
+    }
+    
+    if (args.count == 1) {
+        return 0
+    }
+    
+    var result = 0
+    
+    switch action {
+    case "count":
+        for i in args {
+            if (i.isInt) {
+                result += 1
+            }
+        }
+    case "avg":
+        for i in args {
+            var divisor = 0
+            if (i.isInt) {
+                result += Int(i)!
+                divisor += 1
+            }
+            result / divisor
+        }
+    case "fact":
+        for i in args {
+            if (i.isInt) {
+                var curr = Int(i)!
+                if curr == 0 {
+                    result = 1
+                } else {
+                    result = curr
+                }
+                while curr > 1 {
+                    curr -= 1
+                    result *= curr
+                }
+            }
+        }
+    default:
+        var nums = [Int]()
+        for i in args {
+            if (i.isInt) {
+                nums.append(Int(i)!)
+            }
+        }
+        if (nums.count == 2) {
+        switch action {
+            case "+":
+                result = nums[0] + nums[1]
+            case "-":
+                result = nums[0] - nums[1]
+            case "*":
+                result = nums[0] * nums[1]
+            case "/":
+                result = nums[0] / nums[1]
+            default:
+                result = nums[0] % nums[1]
+            }
+        }
+    }
+    return result
 }
 
 func calculate(_ arg: String) -> Int {
-    return -1
+    let arr = arg.split(separator: " ")
+    var stringArr = [String]()
+    for i in arr {
+        stringArr.append(String(i))
+    }
+    return calculate(stringArr)
 }
 
 // -------------------------------------------
 // All of these expressions should return true
 // if you have implemented calculate() correctly
-//
+
 calculate(["2", "+", "2"]) == 4
 calculate(["4", "+", "4"]) == 8
 calculate(["2", "-", "2"]) == 0
